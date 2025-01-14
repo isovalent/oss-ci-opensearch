@@ -25,6 +25,12 @@
       "events": "workflow_dispatch,push"
     },
     {
+      "name": "cilium-cilium-1.17",
+      "repository": "cilium/cilium",
+      "branch": "v1.17",
+      "events": "workflow_dispatch,push"
+    },
+    {
       "name": "cilium-tetragon-main",
       "repository": "cilium/tetragon",
       "branch": "main",
