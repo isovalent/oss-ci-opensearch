@@ -38,6 +38,7 @@ func GetWorkflowRuns(
 	event string,
 	since time.Time,
 	until time.Time,
+	workflowID int64,
 ) ([]*types.WorkflowRun, error) {
 	baseLogger := logger.With(
 		"repoOwner", repoOwner,
@@ -74,28 +75,55 @@ func GetWorkflowRuns(
 		}
 
 		l := baseLogger.With("dateQuery", dateQuery, "page", runOpts.Page)
-		l.Info("Pulling workflow runs for repository", "event", event, "status", status)
+		l.Info("Pulling workflow runs for repository", "event", event, "status", status, "workflowID", workflowID)
 
-		runs, runResp, err := WrapWithRateLimitRetry[github.WorkflowRuns](
-			ctx, l,
-			func() (*github.WorkflowRuns, *github.Response, error) {
-				return client.Actions.ListRepositoryWorkflowRuns(
-					ctx, repoOwner, repoName, &github.ListWorkflowRunsOptions{
-						Event:  event,
-						Branch: branch,
-						// Not relevant. The Pull Requests field in the response
-						// returns open PRs that have the same HEAD SHA as the returned
-						// workflow run. In other words, the pull_requests field contains
-						// pull requests that use the same wversion of the workflow file
-						// as the returned workflow run.
-						ExcludePullRequests: true,
-						Status:              status,
-						Created:             dateQuery,
-						ListOptions:         runOpts,
-					},
-				)
-			},
+		var (
+			runs    *github.WorkflowRuns
+			runResp *github.Response
+			err     error
 		)
+		if workflowID != 0 {
+			runs, runResp, err = WrapWithRateLimitRetry(
+				ctx, l, func() (*github.WorkflowRuns, *github.Response, error) {
+					return client.Actions.ListWorkflowRunsByID(
+						ctx, repoOwner, repoName, workflowID, &github.ListWorkflowRunsOptions{
+							Event:  event,
+							Branch: branch,
+							// Not relevant. The Pull Requests field in the response
+							// returns open PRs that have the same HEAD SHA as the returned
+							// workflow run. In other words, the pull_requests field contains
+							// pull requests that use the same wversion of the workflow file
+							// as the returned workflow run.
+							ExcludePullRequests: true,
+							Status:              status,
+							Created:             dateQuery,
+							ListOptions:         runOpts,
+						},
+					)
+				},
+			)
+		} else {
+			runs, runResp, err = WrapWithRateLimitRetry[github.WorkflowRuns](
+				ctx, l,
+				func() (*github.WorkflowRuns, *github.Response, error) {
+					return client.Actions.ListRepositoryWorkflowRuns(
+						ctx, repoOwner, repoName, &github.ListWorkflowRunsOptions{
+							Event:  event,
+							Branch: branch,
+							// Not relevant. The Pull Requests field in the response
+							// returns open PRs that have the same HEAD SHA as the returned
+							// workflow run. In other words, the pull_requests field contains
+							// pull requests that use the same wversion of the workflow file
+							// as the returned workflow run.
+							ExcludePullRequests: true,
+							Status:              status,
+							Created:             dateQuery,
+							ListOptions:         runOpts,
+						},
+					)
+				},
+			)
+		}
 
 		if err != nil {
 			return nil, fmt.Errorf(

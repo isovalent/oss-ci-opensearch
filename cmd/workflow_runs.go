@@ -33,6 +33,7 @@ type typeWorkflowRunsParams struct {
 	IncludeTestsuites           bool
 	IncludeErrorLogs            bool
 	ParseWorkflowDispatchInputs bool
+	WorkflowID                  int64
 }
 
 func setTestedFields(
@@ -139,6 +140,7 @@ func pullRunsWithEventAndStatus(
 	repoName,
 	event,
 	status string,
+	workflowID int64,
 ) {
 	eventLogger := logger.With(
 		"event", event,
@@ -149,12 +151,16 @@ func pullRunsWithEventAndStatus(
 		ctx, logger, client,
 		repoOwner, repoName, workflowRunsParams.Branch,
 		status, event, workflowRunsParams.Since, workflowRunsParams.Until,
+		workflowID,
 	)
 	if err != nil {
 		eventLogger.Error(
 			"Unable to pull workflow runs",
 			"err", err,
 		)
+		if strings.Contains(err.Error(), "404 Not Found") {
+			return
+		}
 		os.Exit(1)
 	}
 
@@ -285,12 +291,13 @@ var (
 				"repoName", repoName,
 				"events", workflowRunsParams.Events,
 				"runStatuses", workflowRunsParams.RunStatuses,
+				"workflowID", workflowRunsParams.WorkflowID,
 			)
 
 			for _, event := range workflowRunsParams.Events {
 				for _, status := range workflowRunsParams.RunStatuses {
 					pullRunsWithEventAndStatus(
-						ctx, logger, client, repoOwner, repoName, event, status,
+						ctx, logger, client, repoOwner, repoName, event, status, workflowRunsParams.WorkflowID,
 					)
 				}
 			}
@@ -352,6 +359,10 @@ func init() {
 		&workflowRunsParams.ParseWorkflowDispatchInputs, "parse-wd-inputs", true,
 		"For workflow runs triggered by workflow_dispatch that have a job named echo-inputs"+
 			"parse logs to determine the inputs given to the trigger. See cilium/cilium#31424",
+	)
+	workflowRunsCmd.PersistentFlags().Int64VarP(
+		&workflowRunsParams.WorkflowID, "workflow-id", "w", 0,
+		"Only pull the specified workflow ID and not all workflow runs",
 	)
 	workflowCmd.AddCommand(workflowRunsCmd)
 }
