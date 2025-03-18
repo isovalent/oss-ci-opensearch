@@ -8,6 +8,9 @@ import (
 	"io"
 	"io/fs"
 	"log/slog"
+	"maps"
+	"regexp"
+	"slices"
 	"strings"
 	"time"
 
@@ -16,6 +19,33 @@ import (
 	"github.com/isovalent/corgi/pkg/types"
 	"github.com/isovalent/corgi/pkg/util"
 )
+
+var (
+	ErrInvalidFailureData = errors.New("unsupported format for testcase.failure.data")
+
+	metadataDelimiter   = ";metadata;"
+	reFailureDataOwners = regexp.MustCompile(`@[-a-zA-Z\/0-9]*`)
+	reFailureDataTests  = regexp.MustCompile(`\(([-a-zA-Z\/0-9]*)\)`)
+)
+
+func parseOwners(data string) []string {
+	return reFailureDataOwners.FindAllString(data, -1)
+}
+
+func parseTestNames(data string) []string {
+	return reFailureDataTests.FindAllStringSubmatch(data, -1)[1]
+}
+
+func parseFailureData(data string) (owners, testNames []string, err error) {
+	// Expected input:
+	// check-log-errors/no-errors-in-logs/kind-kind/kube-system/cilium-xxxxx (cilium-agent) - Owners: @ci/owner1 (no-errors-in-logs), @ci/owner2 (no-errors-in-logs)
+	parsed := strings.Split(data, metadataDelimiter)
+	if len(parsed) <= 1 {
+		return nil, nil, ErrInvalidFailureData
+	}
+
+	return parseOwners(parsed[1]), parseTestNames(parsed[1]), nil
+}
 
 func parseTestsuite(
 	suite *junit.Testsuite,
@@ -54,6 +84,7 @@ func parseTestsuite(
 	}
 
 	cases := []types.Testcase{}
+	allOwners := make(map[string]struct{})
 
 	for _, testcase := range suite.Testcases {
 		tc := types.Testcase{
@@ -98,8 +129,23 @@ func parseTestsuite(
 			tc.Duration = duration
 		}
 
+		if testcase.Failure != nil {
+			// Parse owners
+			owners, _, err := parseFailureData(testcase.Failure.Data)
+			if err != nil {
+				l.Warn("Could not parse owners from testcase failure data", "data", testcase.Failure.Data, "error", err)
+				continue
+			}
+			tc.Owners = owners
+			for _, o := range tc.Owners {
+				allOwners[o] = struct{}{}
+			}
+		}
+
 		cases = append(cases, tc)
 	}
+
+	s.Owners = slices.Sorted(maps.Keys(allOwners))
 
 	return s, cases, nil
 }

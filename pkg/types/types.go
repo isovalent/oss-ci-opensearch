@@ -259,6 +259,7 @@ type Testsuite struct {
 	TotalSkipped  int           `json:"test_suite_total_skipped,omitempty"`
 	Duration      time.Duration `json:"test_suite_duration,omitempty"`
 	EndTime       time.Time     `json:"test_suite_end_time,omitempty"`
+	Owners        []string      `json:"test_suite_owners,omitempty"`
 }
 
 type Testcase struct {
@@ -267,6 +268,7 @@ type Testcase struct {
 	Name     string        `json:"test_case_name,omitempty"`
 	Duration time.Duration `json:"test_case_duration,omitempty"`
 	Status   string        `json:"test_case_status,omitempty"`
+	Owners   []string      `json:"test_case_owners,omitempty"`
 }
 
 // FailureRate holds information regarding the rate of failure for a particular

@@ -76,3 +76,33 @@ func TestParseFileFailure(t *testing.T) {
 	assert.Greater(t, suites[0].TotalFailures, 0)
 	assert.Greater(t, len(cases), 0)
 }
+
+func TestParseFailureData(t *testing.T) {
+	input := "check-log-errors/no-errors-in-logs/kind-kind/kube-system/cilium-xxxxx (cilium-agent);metadata;Owners: @ci/owner1 (no-errors-in-logs), @ci/owner2 (no-errors-in-logs)"
+
+	owners, tests, err := parseFailureData(input)
+	assert.NoError(t, err)
+	assert.Contains(t, owners, "@ci/owner1")
+	assert.Contains(t, owners, "@ci/owner2")
+	assert.Contains(t, tests, "no-errors-in-logs")
+}
+
+func TestParseTestSuiteCodeOwners(t *testing.T) {
+	path := "testdata/ci-eks-failed.xml"
+
+	f, err := NewTestFile(path)
+	assert.NoError(t, err)
+	suites, cases, err := parseFile(f, dummyWorkflowRun, dummyConclusions, logger)
+	assert.NoError(t, err)
+
+	assert.NotEmpty(t, suites[0].Owners)
+
+	var failed types.Testcase
+	for _, tt := range cases {
+		if tt.Status == "failed" {
+			failed = tt
+			break
+		}
+	}
+	assert.NotEmpty(t, failed.Owners)
+}
