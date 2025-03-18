@@ -1,12 +1,12 @@
 package junit
 
 import (
-	"archive/zip"
 	"bytes"
 	"encoding/xml"
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"log/slog"
 	"strings"
 	"time"
@@ -104,8 +104,13 @@ func parseTestsuite(
 	return s, cases, nil
 }
 
-func ParseFiles(
-	files []*zip.File,
+type file interface {
+	Open() (io.ReadCloser, error)
+	FileInfo() fs.FileInfo
+}
+
+func parseFile(
+	fil file,
 	run *types.WorkflowRun,
 	allowedTestConclusions []string,
 	l *slog.Logger,
@@ -113,63 +118,82 @@ func ParseFiles(
 	suites := []types.Testsuite{}
 	cases := []types.Testcase{}
 
-	for _, fil := range files {
-		if !strings.HasSuffix(fil.Name, ".xml") || fil.FileInfo().IsDir() {
-			l.Debug("ignoring non-xml file in cilium-junits archive", "file", fil.Name)
-			continue
+	if !strings.HasSuffix(fil.FileInfo().Name(), ".xml") || fil.FileInfo().IsDir() {
+		l.Debug("ignoring non-xml file in cilium-junits archive", "file", fil.FileInfo().Name())
+		return nil, nil, nil
+	}
+
+	l.Info("Parsing JUnit file", "name", fil.FileInfo().Name())
+
+	fileReader, err := fil.Open()
+	if err != nil {
+		return nil, nil, fmt.Errorf("unable to open file %q: %w", fil.FileInfo().Name(), err)
+	}
+	defer fileReader.Close()
+
+	buf := &bytes.Buffer{}
+
+	_, err = io.Copy(buf, fileReader)
+	if err != nil {
+		return nil, nil, fmt.Errorf("unable to read junit file %q: %w", fil.FileInfo().Name(), err)
+	}
+
+	// Sometimes a JUnit file can be empty, so we need to rule out empty files.
+	if buf.Len() == 0 {
+		l.Debug("ignoring empty xml file", "file", fil.FileInfo().Name())
+		return nil, nil, nil
+	}
+
+	// A JUnit file may either be:
+	// 1. A junit.Testsuites object with multiple junit.Testsuite objects.
+	// 2. A junit.Testsuites object with a single junit.Testsuite object.
+	// 3. A single junit.Testsuite.
+	// Try all options when unmarshalling.
+	// Note that the XML parser thinks the Testsuites object is a valid Testsuite object, so
+	// we have to try parsing into a Testsuites first.
+	toParse := []junit.Testsuite{}
+	s := junit.Testsuites{}
+	if err := xml.Unmarshal(buf.Bytes(), &s); err != nil {
+		s := junit.Testsuite{}
+		if err2 := xml.Unmarshal(buf.Bytes(), &s); err2 != nil {
+			e := errors.Join(err, err2)
+			return nil, nil, fmt.Errorf("unable to unmarshal junit file '%s' in artifact to Testsuite or Testsuites object: %w", fil.FileInfo().Name(), e)
 		}
+		toParse = append(toParse, s)
+	} else {
+		toParse = s.Suites
+	}
 
-		l.Info("Parsing JUnit file", "name", fil.Name)
-
-		fileReader, err := fil.Open()
+	for _, s := range toParse {
+		parsedSuite, parsedCases, err := parseTestsuite(&s, run, allowedTestConclusions, l)
 		if err != nil {
-			return nil, nil, fmt.Errorf("unable to open file %q: %w", fil.Name, err)
+			return nil, nil, fmt.Errorf("unable to parse test suite in junit file '%s': %w", fil.FileInfo().Name(), err)
 		}
-		defer fileReader.Close()
 
-		buf := &bytes.Buffer{}
+		parsedSuite.JUnitFilename = fil.FileInfo().Name()
+		suites = append(suites, *parsedSuite)
+		cases = append(cases, parsedCases...)
+	}
 
-		_, err = io.Copy(buf, fileReader)
+	return suites, cases, nil
+}
+
+func ParseFiles[F file](
+	files []F,
+	run *types.WorkflowRun,
+	allowedTestConclusions []string,
+	l *slog.Logger,
+) ([]types.Testsuite, []types.Testcase, error) {
+	suites := []types.Testsuite{}
+	cases := []types.Testcase{}
+
+	for _, f := range files {
+		s, c, err := parseFile(f, run, allowedTestConclusions, l)
 		if err != nil {
-			return nil, nil, fmt.Errorf("unable to read junit file %q: %w", fil.Name, err)
+			return nil, nil, err
 		}
-
-		// Sometimes a JUnit file can be empty, so we need to rule out empty files.
-		if buf.Len() == 0 {
-			continue
-		}
-
-		// A JUnit file may either be:
-		// 1. A junit.Testsuites object with multiple junit.Testsuite objects.
-		// 2. A junit.Testsuites object with a single junit.Testsuite object.
-		// 3. A single junit.Testsuite.
-		// Try all options when unmarshalling.
-		// Note that the XML parser thinks the Testsuites object is a valid Testsuite object, so
-		// we have to try parsing into a Testsuites first.
-		toParse := []junit.Testsuite{}
-		s := junit.Testsuites{}
-		if err := xml.Unmarshal(buf.Bytes(), &s); err != nil {
-			s := junit.Testsuite{}
-			if err2 := xml.Unmarshal(buf.Bytes(), &s); err2 != nil {
-				e := errors.Join(err, err2)
-				return nil, nil, fmt.Errorf("unable to unmarshal junit file '%s' in artifact to Testsuite or Testsuites object: %w", fil.Name, e)
-			}
-			toParse = append(toParse, s)
-		} else {
-			toParse = s.Suites
-		}
-
-		for _, s := range toParse {
-			parsedSuite, parsedCases, err := parseTestsuite(&s, run, allowedTestConclusions, l)
-			if err != nil {
-				return nil, nil, fmt.Errorf("unable to parse test suite in junit file '%s': %w", fil.Name, err)
-			}
-
-			parsedSuite.JUnitFilename = fil.Name
-			suites = append(suites, *parsedSuite)
-			cases = append(cases, parsedCases...)
-		}
-
+		suites = append(suites, s...)
+		cases = append(cases, c...)
 	}
 
 	return suites, cases, nil
