@@ -11,10 +11,10 @@ import (
 	"github.com/google/go-github/v60/github"
 	"github.com/spf13/cobra"
 
-	gh "github.com/learnitall/cilium-ci-opensearch/pkg/github"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/log"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/opensearch"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/types"
+	gh "github.com/isovalent/oss-ci-opensearch/pkg/github"
+	"github.com/isovalent/oss-ci-opensearch/pkg/log"
+	"github.com/isovalent/oss-ci-opensearch/pkg/opensearch"
+	"github.com/isovalent/oss-ci-opensearch/pkg/types"
 )
 
 type typeWorkflowRunsParams struct {

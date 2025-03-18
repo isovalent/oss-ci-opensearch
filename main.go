@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/learnitall/cilium-ci-opensearch/cmd"
+	"github.com/isovalent/oss-ci-opensearch/cmd"
 )
 
 func main() {

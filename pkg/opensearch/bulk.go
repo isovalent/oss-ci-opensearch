@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/learnitall/cilium-ci-opensearch/pkg/types"
+	"github.com/isovalent/oss-ci-opensearch/pkg/types"
 )
 
 type BulkEntry struct {
