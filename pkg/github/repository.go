@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/google/go-github/v60/github"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/types"
+	"github.com/isovalent/oss-ci-opensearch/pkg/types"
 )
 
 // GetRepository returns a Repository object for a repository described by the given

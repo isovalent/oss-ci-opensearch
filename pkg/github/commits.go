@@ -6,7 +6,7 @@ import (
 	"log/slog"
 
 	"github.com/google/go-github/v60/github"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/types"
+	"github.com/isovalent/oss-ci-opensearch/pkg/types"
 )
 
 func GetCommitBySHA(

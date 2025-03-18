@@ -10,8 +10,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/learnitall/cilium-ci-opensearch/pkg/types"
-	"github.com/learnitall/cilium-ci-opensearch/pkg/util"
+	"github.com/isovalent/oss-ci-opensearch/pkg/types"
+	"github.com/isovalent/oss-ci-opensearch/pkg/util"
 	"github.com/opensearch-project/opensearch-go"
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )
