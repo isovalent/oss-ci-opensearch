@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <testsuites tests="114" disabled="42" errors="0" failures="0" time="1041.94978859">
+      <testsuite name="connectivity test" id="0" package="cilium" tests="114" errors="0" failures="0" skipped="42" time="1041.94978859" timestamp="2025-03-19T17:09:51">
+          <properties>
+              <property name="Args" value="--flow-validation=disabled|--hubble=false|--test-concurrency=3|--log-code-owners|--code-owners=CODEOWNERS|--exclude-code-owners=@cilium/github-sec|--collect-sysdump-on-failure|--external-target|amazon.com.|--junit-file|cilium-junits/Installation and Connectivity Test (1.31, ca-central-1, true, true, true, true) - 1.xml|--junit-property|github_job_step=Run connectivity test (1.31, ca-central-1, true, true, true, true)"></property>
+              <property name="github_job_step" value="Run connectivity test (1.31, ca-central-1, true, true, true, true)"></property>
+          </properties>
+          <testcase name="no-unexpected-packet-drops" classname="connectivity test" status="passed" time="0.925259454"></testcase>
+          <testcase name="no-policies-extra" classname="connectivity test" status="passed" time="3.430487275"></testcase>
+          <testcase name="client-ingress-knp" classname="connectivity test" status="passed" time="10.670751451"></testcase>
+          <testcase name="all-ingress-deny-from-outside" classname="connectivity test" status="skipped" time="0">
+              <skipped message="all-ingress-deny-from-outside skipped"></skipped>
+          </testcase>
+          <testcase name="all-egress-deny-knp" classname="connectivity test" status="passed" time="53.699805997"></testcase>
+          <testcase name="cluster-entity-multi-cluster" classname="connectivity test" status="skipped" time="0">
+              <skipped message="cluster-entity-multi-cluster skipped"></skipped>
+          </testcase>
+          <testcase name="echo-ingress" classname="connectivity test" status="passed" time="10.593322418"></testcase>
+          <testcase name="client-ingress-icmp" classname="connectivity test" status="passed" time="12.403193215"></testcase>
+          <testcase name="client-egress-expression" classname="connectivity test" status="passed" time="4.362396767"></testcase>
+          <testcase name="client-egress-expression-port-range" classname="connectivity test" status="passed" time="4.118844979"></testcase>
+          <testcase name="client-egress-to-echo-service-account" classname="connectivity test" status="passed" time="10.107473282"></testcase>
+          <testcase name="client-egress-to-echo-service-account-port-range" classname="connectivity test" status="passed" time="10.243855503"></testcase>
+          <testcase name="to-cidr-external-knp" classname="connectivity test" status="passed" time="10.424498164"></testcase>
+          <testcase name="client-ingress-from-other-client-icmp-deny" classname="connectivity test" status="passed" time="13.467924951"></testcase>
+          <testcase name="client-egress-to-echo-expression-deny" classname="connectivity test" status="passed" time="6.363568294"></testcase>
+          <testcase name="client-egress-to-echo-expression-deny-port-range" classname="connectivity test" status="passed" time="11.220537745"></testcase>
+          <testcase name="client-egress-to-cidr-deny" classname="connectivity test" status="passed" time="10.357247018"></testcase>
+          <testcase name="client-egress-to-cidr-deny-default" classname="connectivity test" status="passed" time="14.546352361"></testcase>
+          <testcase name="north-south-loadbalancing" classname="connectivity test" status="skipped" time="0">
+              <skipped message="north-south-loadbalancing skipped"></skipped>
+          </testcase>
+          <testcase name="node-to-node-encryption" classname="connectivity test" status="skipped" time="0">
+              <skipped message="node-to-node-encryption skipped"></skipped>
+          </testcase>
+          <testcase name="seq-egress-gateway-with-l7-policy" classname="connectivity test" status="skipped" time="0">
+              <skipped message="seq-egress-gateway-with-l7-policy skipped"></skipped>
+          </testcase>
+          <testcase name="echo-ingress-l7" classname="connectivity test" status="passed" time="29.148972581"></testcase>
+          <testcase name="echo-ingress-l7-via-hostport" classname="connectivity test" status="passed" time="10.776156879"></testcase>
+          <testcase name="client-egress-l7" classname="connectivity test" status="passed" time="28.351954594"></testcase>
+          <testcase name="client-egress-l7-port-range" classname="connectivity test" status="passed" time="30.074845726"></testcase>
+          <testcase name="client-egress-l7-set-header" classname="connectivity test" status="passed" time="38.903869015"></testcase>
+          <testcase name="client-egress-l7-set-header-port-range" classname="connectivity test" status="passed" time="38.824219478"></testcase>
+          <testcase name="pod-to-ingress-service" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-ingress-service-allow-ingress-identity" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service-allow-ingress-identity skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-ingress-service-deny-all" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service-deny-all skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-ingress-service-deny-backend-service" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service-deny-backend-service skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-ingress-service-deny-ingress-identity" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service-deny-ingress-identity skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-ingress-service-deny-source-egress-other-node" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-ingress-service-deny-source-egress-other-node skipped"></skipped>
+          </testcase>
+          <testcase name="to-fqdns" classname="connectivity test" status="passed" time="21.912531365"></testcase>
+          <testcase name="pod-to-controlplane-host-cidr" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-controlplane-host-cidr skipped"></skipped>
+          </testcase>
+          <testcase name="local-redirect-policy-with-node-dns" classname="connectivity test" status="skipped" time="0">
+              <skipped message="local-redirect-policy-with-node-dns skipped"></skipped>
+          </testcase>
+          <testcase name="multicast" classname="connectivity test" status="skipped" time="0">
+              <skipped message="multicast skipped"></skipped>
+          </testcase>
+          <testcase name="no-policies" classname="connectivity test" status="passed" time="11.291515215"></testcase>
+          <testcase name="allow-all-except-world" classname="connectivity test" status="passed" time="7.827017834"></testcase>
+          <testcase name="allow-all-with-metrics-check" classname="connectivity test" status="passed" time="1.173098504"></testcase>
+          <testcase name="all-ingress-deny-knp" classname="connectivity test" status="passed" time="16.176207976"></testcase>
+          <testcase name="all-entities-deny" classname="connectivity test" status="passed" time="27.786384196"></testcase>
+          <testcase name="host-entity-egress" classname="connectivity test" status="passed" time="3.153753922"></testcase>
+          <testcase name="echo-ingress-from-outside" classname="connectivity test" status="skipped" time="0">
+              <skipped message="echo-ingress-from-outside skipped"></skipped>
+          </testcase>
+          <testcase name="client-egress" classname="connectivity test" status="passed" time="2.765230473"></testcase>
+          <testcase name="client-egress-expression-knp" classname="connectivity test" status="passed" time="2.616235074"></testcase>
+          <testcase name="client-egress-expression-knp-port-range" classname="connectivity test" status="passed" time="4.601530545"></testcase>
+          <testcase name="to-entities-world" classname="connectivity test" status="passed" time="15.428233465"></testcase>
+          <testcase name="to-entities-world-port-range" classname="connectivity test" status="passed" time="16.86848472"></testcase>
+          <testcase name="seq-from-cidr-host-netns" classname="connectivity test" status="skipped" time="0">
+              <skipped message="seq-from-cidr-host-netns skipped"></skipped>
+          </testcase>
+          <testcase name="client-egress-to-echo-deny" classname="connectivity test" status="passed" time="18.742619506"></testcase>
+          <testcase name="client-egress-to-echo-deny-port-range" classname="connectivity test" status="passed" time="20.028178387"></testcase>
+          <testcase name="client-with-service-account-egress-to-echo-deny" classname="connectivity test" status="passed" time="11.100799797"></testcase>
+          <testcase name="client-with-service-account-egress-to-echo-deny-port-range" classname="connectivity test" status="passed" time="8.08057939"></testcase>
+          <testcase name="client-egress-to-cidrgroup-deny" classname="connectivity test" status="passed" time="10.930424947"></testcase>
+          <testcase name="clustermesh-endpointslice-sync" classname="connectivity test" status="skipped" time="0">
+              <skipped message="clustermesh-endpointslice-sync skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-pod-encryption" classname="connectivity test" status="passed" time="3.651885452"></testcase>
+          <testcase name="pod-to-pod-with-l7-policy-encryption" classname="connectivity test" status="passed" time="6.531722071"></testcase>
+          <testcase name="seq-egress-gateway" classname="connectivity test" status="skipped" time="0">
+              <skipped message="seq-egress-gateway skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-node-cidrpolicy" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-node-cidrpolicy skipped"></skipped>
+          </testcase>
+          <testcase name="echo-ingress-l7-named-port" classname="connectivity test" status="passed" time="29.158984254"></testcase>
+          <testcase name="client-egress-l7-named-port" classname="connectivity test" status="passed" time="28.487826919"></testcase>
+          <testcase name="echo-ingress-auth-always-fail" classname="connectivity test" status="skipped" time="0">
+              <skipped message="echo-ingress-auth-always-fail skipped"></skipped>
+          </testcase>
+          <testcase name="echo-ingress-auth-always-fail-port-range" classname="connectivity test" status="skipped" time="0">
+              <skipped message="echo-ingress-auth-always-fail-port-range skipped"></skipped>
+          </testcase>
+          <testcase name="outside-to-ingress-service" classname="connectivity test" status="skipped" time="0">
+              <skipped message="outside-to-ingress-service skipped"></skipped>
+          </testcase>
+          <testcase name="outside-to-ingress-service-deny-all-ingress" classname="connectivity test" status="skipped" time="0">
+              <skipped message="outside-to-ingress-service-deny-all-ingress skipped"></skipped>
+          </testcase>
+          <testcase name="outside-to-ingress-service-deny-cidr" classname="connectivity test" status="skipped" time="0">
+              <skipped message="outside-to-ingress-service-deny-cidr skipped"></skipped>
+          </testcase>
+          <testcase name="outside-to-ingress-service-deny-world-identity" classname="connectivity test" status="skipped" time="0">
+              <skipped message="outside-to-ingress-service-deny-world-identity skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-controlplane-host" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-controlplane-host skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-k8s-on-controlplane-cidr" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-k8s-on-controlplane-cidr skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-pod-no-frag" classname="connectivity test" status="passed" time="0.397410716"></testcase>
+          <testcase name="strict-mode-encryption" classname="connectivity test" status="skipped" time="0">
+              <skipped message="strict-mode-encryption skipped"></skipped>
+          </testcase>
+          <testcase name="no-policies-from-outside" classname="connectivity test" status="skipped" time="0">
+              <skipped message="no-policies-from-outside skipped"></skipped>
+          </testcase>
+          <testcase name="client-ingress" classname="connectivity test" status="passed" time="11.125863234"></testcase>
+          <testcase name="all-ingress-deny" classname="connectivity test" status="passed" time="18.162751443"></testcase>
+          <testcase name="all-egress-deny" classname="connectivity test" status="passed" time="55.128910454"></testcase>
+          <testcase name="cluster-entity" classname="connectivity test" status="passed" time="5.164064404"></testcase>
+          <testcase name="host-entity-ingress" classname="connectivity test" status="passed" time="4.226737798"></testcase>
+          <testcase name="echo-ingress-knp" classname="connectivity test" status="passed" time="12.224800277"></testcase>
+          <testcase name="client-egress-knp" classname="connectivity test" status="passed" time="2.738434411"></testcase>
+          <testcase name="client-with-service-account-egress-to-echo" classname="connectivity test" status="passed" time="4.157545957"></testcase>
+          <testcase name="client-with-service-account-egress-to-echo-port-range" classname="connectivity test" status="passed" time="4.409300503"></testcase>
+          <testcase name="to-cidr-external" classname="connectivity test" status="passed" time="10.526632793"></testcase>
+          <testcase name="echo-ingress-from-other-client-deny" classname="connectivity test" status="passed" time="10.342762289"></testcase>
+          <testcase name="client-ingress-to-echo-named-port-deny" classname="connectivity test" status="passed" time="7.523628589"></testcase>
+          <testcase name="client-egress-to-echo-service-account-deny" classname="connectivity test" status="passed" time="4.116819588"></testcase>
+          <testcase name="client-egress-to-echo-service-account-deny-port-range" classname="connectivity test" status="passed" time="7.404505293"></testcase>
+          <testcase name="client-egress-to-cidrgroup-deny-by-label" classname="connectivity test" status="passed" time="12.139725976"></testcase>
+          <testcase name="health" classname="connectivity test" status="passed" time="0.644471536"></testcase>
+          <testcase name="pod-to-pod-encryption-v2" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-pod-encryption-v2 skipped"></skipped>
+          </testcase>
+          <testcase name="pod-to-pod-with-l7-policy-encryption-v2" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-pod-with-l7-policy-encryption-v2 skipped"></skipped>
+          </testcase>
+          <testcase name="egress-gateway-excluded-cidrs" classname="connectivity test" status="skipped" time="0">
+              <skipped message="egress-gateway-excluded-cidrs skipped"></skipped>
+          </testcase>
+          <testcase name="north-south-loadbalancing-with-l7-policy" classname="connectivity test" status="skipped" time="0">
+              <skipped message="north-south-loadbalancing-with-l7-policy skipped"></skipped>
+          </testcase>
+          <testcase name="north-south-loadbalancing-with-l7-policy-port-range" classname="connectivity test" status="skipped" time="0">
+              <skipped message="north-south-loadbalancing-with-l7-policy-port-range skipped"></skipped>
+          </testcase>
+          <testcase name="client-egress-l7-method" classname="connectivity test" status="passed" time="30.757730527"></testcase>
+          <testcase name="client-egress-l7-method-port-range" classname="connectivity test" status="passed" time="29.304982061"></testcase>
+          <testcase name="client-egress-tls-sni" classname="connectivity test" status="passed" time="9.911296744"></testcase>
+          <testcase name="client-egress-tls-sni-denied" classname="connectivity test" status="passed" time="9.702404018"></testcase>
+          <testcase name="client-egress-l7-tls-headers-sni" classname="connectivity test" status="passed" time="4.664035375"></testcase>
+          <testcase name="client-egress-l7-tls-headers-other-sni" classname="connectivity test" status="passed" time="3.039377744"></testcase>
+          <testcase name="echo-ingress-mutual-auth-spiffe" classname="connectivity test" status="skipped" time="0">
+              <skipped message="echo-ingress-mutual-auth-spiffe skipped"></skipped>
+          </testcase>
+          <testcase name="echo-ingress-mutual-auth-spiffe-port-range" classname="connectivity test" status="skipped" time="0">
+              <skipped message="echo-ingress-mutual-auth-spiffe-port-range skipped"></skipped>
+          </testcase>
+          <testcase name="dns-only" classname="connectivity test" status="passed" time="34.622737798"></testcase>
+          <testcase name="pod-to-k8s-on-controlplane" classname="connectivity test" status="skipped" time="0">
+              <skipped message="pod-to-k8s-on-controlplane skipped"></skipped>
+          </testcase>
+          <testcase name="local-redirect-policy" classname="connectivity test" status="skipped" time="0">
+              <skipped message="local-redirect-policy skipped"></skipped>
+          </testcase>
+          <testcase name="seq-bgp-control-plane-v1" classname="connectivity test" status="skipped" time="0">
+              <skipped message="seq-bgp-control-plane-v1 skipped"></skipped>
+          </testcase>
+          <testcase name="seq-bgp-control-plane-v2" classname="connectivity test" status="skipped" time="0">
+              <skipped message="seq-bgp-control-plane-v2 skipped"></skipped>
+          </testcase>
+          <testcase name="host-firewall-ingress" classname="connectivity test" status="skipped" time="0">
+              <skipped message="host-firewall-ingress skipped"></skipped>
+          </testcase>
+          <testcase name="host-firewall-egress" classname="connectivity test" status="skipped" time="0">
+              <skipped message="host-firewall-egress skipped"></skipped>
+          </testcase>
+          <testcase name="seq-client-egress-l7-tls-deny-without-headers" classname="connectivity test" status="passed" time="97.403599767"></testcase>
+          <testcase name="seq-client-egress-l7-tls-headers" classname="connectivity test" status="passed" time="3.239799269"></testcase>
+          <testcase name="seq-client-egress-l7-extra-tls-headers" classname="connectivity test" status="passed" time="8.29661548"></testcase>
+          <testcase name="seq-client-egress-l7-tls-headers-port-range" classname="connectivity test" status="passed" time="4.15442603"></testcase>
+          <testcase name="check-log-errors" classname="connectivity test" status="passed" time="5.089637357"></testcase>
+      </testsuite>
+  </testsuites>
