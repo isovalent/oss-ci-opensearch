@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/isovalent/oss-ci-opensearch/cmd"
+	"github.com/isovalent/corgi/cmd"
 )
 
 func main() {

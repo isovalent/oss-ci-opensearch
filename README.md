@@ -1,6 +1,7 @@
-# Cilium CI OpenSearch
+# CORGI 🐕
 
-Connector for ingesting Cilium CI data into OpenSearch.
+Cilium OpenseaRch GitHub Ingester is a connector for ingesting Cilium CI
+data into OpenSearch.
 
 ## Workflow Runs
 

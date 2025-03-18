@@ -18,8 +18,8 @@ import (
 	"github.com/google/go-github/v60/github"
 	"github.com/jstemmer/go-junit-report/v2/junit"
 
-	"github.com/isovalent/oss-ci-opensearch/pkg/types"
-	"github.com/isovalent/oss-ci-opensearch/pkg/util"
+	"github.com/isovalent/corgi/pkg/types"
+	"github.com/isovalent/corgi/pkg/util"
 )
 
 const PER_PAGE = 100

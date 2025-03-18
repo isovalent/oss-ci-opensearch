@@ -6,15 +6,15 @@ IMAGE_TAG ?= latest
 .PHONY: all
 all: test
 
-opensearch-ingester: $(shell find . -iname "*.go")
+corgi: $(shell find . -iname "*.go")
 	CGO_ENABLED=0 $(GO) build $(GO_BUILD_FLAGS) \
 			    -mod=vendor \
 			    -o $@ .
 
 .PHONY: test
-test: opensearch-ingester
+test: corgi
 	$(GO) test -mod=vendor ./...
 
 .PHONY: clean
 clean:
-	rm -fr opensearch-ingester
+	rm -fr -- corgi
