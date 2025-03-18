@@ -1,4 +1,4 @@
-module github.com/isovalent/oss-ci-opensearch
+module github.com/isovalent/corgi
 
 go 1.23.7
 

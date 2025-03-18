@@ -11,10 +11,10 @@ import (
 	"github.com/google/go-github/v60/github"
 	"github.com/spf13/cobra"
 
-	gh "github.com/isovalent/oss-ci-opensearch/pkg/github"
-	"github.com/isovalent/oss-ci-opensearch/pkg/log"
-	"github.com/isovalent/oss-ci-opensearch/pkg/opensearch"
-	"github.com/isovalent/oss-ci-opensearch/pkg/types"
+	gh "github.com/isovalent/corgi/pkg/github"
+	"github.com/isovalent/corgi/pkg/log"
+	"github.com/isovalent/corgi/pkg/opensearch"
+	"github.com/isovalent/corgi/pkg/types"
 )
 
 type typeWorkflowRunsParams struct {

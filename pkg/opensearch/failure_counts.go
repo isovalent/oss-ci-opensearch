@@ -10,8 +10,8 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/isovalent/oss-ci-opensearch/pkg/types"
-	"github.com/isovalent/oss-ci-opensearch/pkg/util"
+	"github.com/isovalent/corgi/pkg/types"
+	"github.com/isovalent/corgi/pkg/util"
 	"github.com/opensearch-project/opensearch-go"
 	"github.com/opensearch-project/opensearch-go/opensearchapi"
 )

@@ -9,10 +9,10 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/isovalent/oss-ci-opensearch/pkg/github"
-	"github.com/isovalent/oss-ci-opensearch/pkg/log"
-	ops "github.com/isovalent/oss-ci-opensearch/pkg/opensearch"
-	"github.com/isovalent/oss-ci-opensearch/pkg/types"
+	"github.com/isovalent/corgi/pkg/github"
+	"github.com/isovalent/corgi/pkg/log"
+	ops "github.com/isovalent/corgi/pkg/opensearch"
+	"github.com/isovalent/corgi/pkg/types"
 	"github.com/opensearch-project/opensearch-go"
 	"github.com/spf13/cobra"
 )
