@@ -1,0 +1,24 @@
+.PHONY: all test clean
+
+OPENSEARCH_INITIAL_ADMIN_PASSWORD ?= $(shell openssl rand -base64 16)
+
+define newline
+
+
+endef
+
+define OPENSEARCH_VALUES_YAML
+extraEnvs:
+  - name: OPENSEARCH_INITIAL_ADMIN_PASSWORD
+    value: $(OPENSEARCH_INITIAL_ADMIN_PASSWORD)
+endef
+
+opensearch-values.yaml: Makefile.OpenSearch # Generate an OpenSearch values.yaml file for testing
+	echo '$(subst $(newline),\n,${OPENSEARCH_VALUES_YAML})' > $@
+
+.PHONY: opensearch-ready
+opensearch-ready: # Wait for OpenSearch to be ready
+	kubectl rollout status statefulset.apps/opensearch-cluster-master \
+		--namespace=corgi-test \
+		--timeout=60s \
+		--watch
