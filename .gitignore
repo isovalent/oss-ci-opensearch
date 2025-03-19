@@ -1,3 +1,4 @@
 .direnv
 .envrc
 corgi
+opensearch-values.yaml
