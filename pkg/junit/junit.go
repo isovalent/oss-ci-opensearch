@@ -60,6 +60,25 @@ func parseFailureData(data string) (owners, testNames []string, err error) {
 	return owners, testNames, nil
 }
 
+func filterOwners(prefix string, owners, tests []string, match bool) []string {
+	result := make([]string, 0, len(owners))
+	for i, o := range owners {
+		has := strings.HasPrefix(tests[i], prefix)
+		if has == match {
+			result = append(result, o)
+		}
+	}
+	return result
+}
+
+func filterWorkflowOwners(owners, tests []string) []string {
+	return filterOwners(".github", owners, tests, true)
+}
+
+func filterTestOwners(owners, tests []string) []string {
+	return filterOwners(".github", owners, tests, false)
+}
+
 func parseTestsuite(
 	suite *junit.Testsuite,
 	run *types.WorkflowRun,
@@ -144,13 +163,13 @@ func parseTestsuite(
 
 		if testcase.Failure != nil {
 			// Parse owners
-			owners, _, err := parseFailureData(testcase.Failure.Data)
+			owners, testNames, err := parseFailureData(testcase.Failure.Data)
 			if err != nil {
 				l.Warn("Could not parse owners from testcase failure data", "data", testcase.Failure.Data, "error", err)
 				continue
 			}
-			tc.Owners = owners
-			for _, o := range tc.Owners {
+			tc.Owners = filterTestOwners(owners, testNames)
+			for _, o := range filterWorkflowOwners(owners, testNames) {
 				allOwners[o] = struct{}{}
 			}
 		}
