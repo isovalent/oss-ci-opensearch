@@ -106,3 +106,18 @@ func TestParseTestSuiteCodeOwners(t *testing.T) {
 	}
 	assert.NotEmpty(t, failed.Owners)
 }
+
+func TestFilterOwners(t *testing.T) {
+	input := "check-log-errors/no-errors-in-logs/kind-kind/kube-system/cilium-xxxxx (cilium-agent);metadata;Owners: @ci/owner1 (no-errors-in-logs), @ci/owner2 (.github/foo)"
+
+	owners, tests, err := parseFailureData(input)
+	assert.NoError(t, err)
+
+	testOwners := filterTestOwners(owners, tests)
+	assert.Contains(t, testOwners, "@ci/owner1")
+	assert.Len(t, testOwners, 1)
+
+	wfOwners := filterWorkflowOwners(owners, tests)
+	assert.Contains(t, wfOwners, "@ci/owner2")
+	assert.Len(t, wfOwners, 1)
+}
