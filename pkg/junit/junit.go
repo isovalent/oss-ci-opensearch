@@ -22,10 +22,11 @@ import (
 
 var (
 	ErrInvalidFailureData = errors.New("unsupported format for testcase.failure.data")
+	ErrUnbalancedOwners   = errors.New("expected list of '@<owner> (<test>)'")
 
 	metadataDelimiter   = ";metadata;"
 	reFailureDataOwners = regexp.MustCompile(`@[-a-zA-Z\/0-9]*`)
-	reFailureDataTests  = regexp.MustCompile(`\(([-a-zA-Z\/0-9]*)\)`)
+	reFailureDataTests  = regexp.MustCompile(`\(([-a-zA-Z\/0-9.]*)\)`)
 )
 
 func parseOwners(data string) []string {
@@ -33,7 +34,12 @@ func parseOwners(data string) []string {
 }
 
 func parseTestNames(data string) []string {
-	return reFailureDataTests.FindAllStringSubmatch(data, -1)[1]
+	match := reFailureDataTests.FindAllStringSubmatch(data, -1)
+	result := make([]string, 0, len(match))
+	for _, m := range match {
+		result = append(result, m[1])
+	}
+	return result
 }
 
 func parseFailureData(data string) (owners, testNames []string, err error) {
@@ -44,7 +50,14 @@ func parseFailureData(data string) (owners, testNames []string, err error) {
 		return nil, nil, ErrInvalidFailureData
 	}
 
-	return parseOwners(parsed[1]), parseTestNames(parsed[1]), nil
+	owners = parseOwners(parsed[1])
+	testNames = parseTestNames(parsed[1])
+
+	if len(owners) != len(testNames) {
+		return nil, nil, fmt.Errorf("%w: found %v/%v", ErrUnbalancedOwners, owners, testNames)
+	}
+
+	return owners, testNames, nil
 }
 
 func parseTestsuite(
