@@ -164,13 +164,13 @@ func parseTestsuite(
 		if testcase.Failure != nil {
 			// Parse owners
 			owners, testNames, err := parseFailureData(testcase.Failure.Data)
-			if err != nil {
+			if err == nil {
+				tc.Owners = filterTestOwners(owners, testNames)
+				for _, o := range filterWorkflowOwners(owners, testNames) {
+					allOwners[o] = struct{}{}
+				}
+			} else {
 				l.Warn("Could not parse owners from testcase failure data", "data", testcase.Failure.Data, "error", err)
-				continue
-			}
-			tc.Owners = filterTestOwners(owners, testNames)
-			for _, o := range filterWorkflowOwners(owners, testNames) {
-				allOwners[o] = struct{}{}
 			}
 		}
 
